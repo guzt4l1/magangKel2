@@ -2,8 +2,8 @@
 
 
 
-myapp/
-├── client/                  # Frontend (React)
+financeApp/
+├── client/                 
 │   ├── public/
 │   └── src/
 │       ├── components/
@@ -11,14 +11,14 @@ myapp/
 │       ├── context/
 │       ├── services/
 │       └── App.jsx
-├── server/                  # Backend (Express + MariaDB)
+├── server/                 
 │   ├── controllers/
 │   ├── routes/
 │   ├── models/
 │   ├── config/
 │   ├── middlewares/
 │   └── index.js
-├── README.md                # Penting! Untuk dokumentasi produk
-├── .env.example             # Contoh konfigurasi environment
-├── package.json             # Untuk monorepo (atau pisah masing-masing)
-└── LICENSE                  # Tambahkan jika open-source atau jual lepas
+├── README.md              
+├── .env.example            
+├── package.json            
+└── LICENSE                 
