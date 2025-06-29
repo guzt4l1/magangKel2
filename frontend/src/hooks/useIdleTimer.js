@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function useIdleTimer(timeout = 1 * 60 * 1000, onIdle) {
+export default function useIdleTimer(timeout = 15 * 60 * 1000, onIdle) {
   useEffect(() => {
     let timer;
 

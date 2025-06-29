@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosClient from '../services/axiosClient';
+import Swal from 'sweetalert2';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -9,9 +10,17 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    Swal.fire({
+    title: 'Sedang masuk...',
+    text: 'Mohon tunggu sebentar.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
     try {
       const res = await axiosClient.post('/api/auth/login', { email, password });
-      
+      Swal.close();
       // Simpan token JWT ke localStorage
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -22,7 +31,11 @@ export default function Login() {
       // Tampilkan error dari backend jika ada
       const message =
         err.response?.data?.message || 'Login gagal. Periksa kembali kredensial Anda.';
-      alert(message);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Login',
+        text: message,
+      });
     }
   };
 

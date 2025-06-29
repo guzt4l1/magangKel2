@@ -1,16 +1,21 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // pastikan ini adalah koneksi Sequelize-mu
+// backend/models/users.js
+const { DataTypes } = require('sequelize');
+const db = require('../config/db');
 
-const User = sequelize.define('User', {
+const User = db.define('Users', {
   id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
+  },
+  nama: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING(100),
-    allowNull: false,
     unique: true,
+    allowNull: false,
   },
   password: {
     type: DataTypes.STRING(255),
@@ -18,19 +23,30 @@ const User = sequelize.define('User', {
   },
   role: {
     type: DataTypes.STRING(20),
+    allowNull: false,
     defaultValue: 'staff',
   },
   foto: {
     type: DataTypes.STRING(255),
     defaultValue: '/uploads/default.jpg',
   },
+  status: {
+    type: DataTypes.STRING(20),
+    defaultValue: 'aktif',
+  },
   created_at: {
     type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+    defaultValue: db.literal('CURRENT_TIMESTAMP'),
+  },
+  last_login: {
+    type: DataTypes.DATE,
+    allowNull: true,
   },
 }, {
-  tableName: 'Users',
+  tableName: 'Users',          
+  freezeTableName: true,       
   timestamps: false,
+  underscored: true
 });
 
 module.exports = User;

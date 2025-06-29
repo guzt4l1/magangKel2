@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 export default function MainLayout() {
   const navigate = useNavigate();
 
-  useIdleTimer(1 * 60 * 1000, () => {
+  useIdleTimer(15 * 60 * 1000, () => {
     Swal.fire({
       title: 'Sesi Timeout',
       html: 'Anda tidak aktif selama 15 menit.<br>Silakan login kembali.',

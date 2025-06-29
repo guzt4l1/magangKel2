@@ -25,7 +25,6 @@ function App() {
             <Route path="/Transaksi" element={<Transaksi />} />
             <Route path="/Laporan" element={<Laporan />} />
             <Route path="/Pengaturan" element={<Pengaturan />} />
-            {/* Route lain bisa ditambahkan di sini */}
           </Route>
         </Route>
       </Routes>

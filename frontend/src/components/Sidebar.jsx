@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const navigate = useNavigate(); // ✅ HARUS di dalam fungsi komponen!
+  const navigate = useNavigate(); 
   const user = JSON.parse(localStorage.getItem('user')) || {};
 
   const handleLogout = () => {

@@ -1,25 +1,8 @@
-# magangKel2
+# magangKel6
 
-
-
-myapp/
-├── client/                  # Frontend (React)
-│   ├── public/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       ├── context/
-│       ├── services/
-│       └── App.jsx
-├── server/                  # Backend (Express + MariaDB)
-│   ├── controllers/
-│   ├── middlewares/
-│   ├── models/
-│   ├── routes/
-│   ├── config/
-│   ├── middlewares/
-│   └── index.js
-├── README.md                # Penting! Untuk dokumentasi produk
-├── .env.example             # Contoh konfigurasi environment
-├── package.json             # Untuk monorepo (atau pisah masing-masing)
-└── LICENSE                  # Tambahkan jika open-source atau jual lepas
+| Area                    | Saran                                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Mapping Akun**        | Pastikan setiap transaksi menyimpan `akun_debet` dan `akun_kredit` secara eksplisit, atau bisa diturunkan dari jenisnya                     |
+| **Enum/kode transaksi** | Tambahkan field `jenis_transaksi` atau `tipe`, agar saat kamu loop bisa tahu logikanya (misal `penerimaan_utang`, `pengeluaran_beban`, dll) |
+| **Reusable utils**      | Buat helper `generateJurnalFromTransaksi(transaksi)` di backend untuk reusable logic                                                        |
+| **Filter per akun**     | Untuk laporan buku besar, kamu hanya perlu filter dari `jurnal` berdasarkan `akun_id`                                                       |

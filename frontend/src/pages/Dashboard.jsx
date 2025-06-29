@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
 import { Doughnut } from 'react-chartjs-2';
+import { formatTanggal } from '../utils/formatTanggal';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -85,10 +86,9 @@ const Dashboard = () => {
 
   // ===== Pie Chart Config =====
   const pieChartData = {
-    labels: bebanUsaha.map((item) => item.kategori),
-    datasets: [
-      {
-        data: bebanUsaha.map((item) => item.jumlah),
+      labels: Array.isArray(bebanUsaha) ? bebanUsaha.map(item => item.kategori) : [],
+      datasets: [{
+        data: Array.isArray(bebanUsaha) ? bebanUsaha.map(item => item.jumlah || item.total) : [],
         backgroundColor: bebanUsaha.map((_, i) =>
           `hsl(${(i * 360) / bebanUsaha.length}, 70%, 60%)`
         ),
@@ -113,16 +113,24 @@ const Dashboard = () => {
 
     if (activeTab === 'jasa') {
       headers = ['ID', 'Nama Jasa', 'Harga', 'Tanggal'];
-      rows = dataJasa.map((item) => [
-        item.id, item.nama_jasa, `Rp${item.harga.toLocaleString()}`, item.tanggal
-      ]);
+     rows = dataJasa.map((item) => {
+        return [
+          item.id,
+          item.nama,
+          `Rp${item.harga.toLocaleString()}`,
+          formatTanggal(item.created_at)
+        ];
+      });
       total = dataJasa.reduce((sum, item) => sum + item.harga, 0);
     } else if (activeTab === 'utang') {
-      headers = ['ID', 'Keterangan', 'Jumlah', 'Jatuh Tempo'];
-      rows = dataUtang.map((item) => [
-        item.id, item.keterangan, `Rp${item.jumlah.toLocaleString()}`, item.jatuh_tempo
-      ]);
-      total = dataUtang.reduce((sum, item) => sum + item.jumlah, 0);
+        headers = ['ID', 'Keterangan', 'Jumlah', 'Jatuh Tempo'];
+        rows = dataUtang.map((item) => [
+          item.id,
+          item.keterangan,
+          `Rp${item.jumlah.toLocaleString()}`,
+          item.jatuh_tempo
+        ]);
+        total = dataUtang.reduce((sum, item) => sum + item.jumlah, 0);
     } else if (activeTab === 'piutang') {
       headers = ['ID', 'Nama Pelanggan', 'Jumlah', 'Tanggal Transaksi'];
       rows = dataPiutang.map((item) => [
