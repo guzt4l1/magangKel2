@@ -1,88 +1,59 @@
-// backend/app.js
 const express = require('express');
 const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');        
-const authRoutes = require('./routes/authRoutes');
-const protectedRoutes = require('./routes/protectedRoutes');
-const berandaRoutes = require('./routes/beranda');
-const saldoAwalRoutes = require('./routes/saldoAwalRoutes');
-const akunRoutes = require('./routes/akunRoutes'); 
-const penjualanRoutes = require('./routes/penjualanRoutes');
-const jasaRoutes = require('./routes/jasaRoutes');
-const kategoriJasaRoutes = require('./routes/kategoriJasaRoutes');
-const pelangganRoutes = require('./routes/pelangganRoutes');
-const pemasokRoutes = require('./routes/pemasokRoutes');
-const bankRoutes = require('./routes/bankRoutes');
-const asetRoutes = require('./routes/asetRoutes');
-const asetLainRoutes = require('./routes/asetLainRoutes');
-const pemberiPinjamanRoutes = require('./routes/pemberiPinjamanRoutes');
-const bankPemberiPinjamanRoutes = require('./routes/bankPemberiPinjamanRoutes');
-const bebanLainRoutes = require('./routes/bebanLainRoutes');
-const utangRoutes = require('./routes/utangRoutes');
-const piutangRoutes = require('./routes/piutang');
-const penerimaanModalRoutes = require('./routes/penerimaanModalRoutes');
-const penarikanBankRoutes = require('./routes/penarikanBankRoutes');
-const pendapatanDimukaRoutes = require('./routes/pendapatanDimukaRoutes');
-const PenghasilanLainRoutes = require('./routes/penghasilanLainRoutes');
-const PengeluaranKewajibanRoutes = require('./routes/pengeluaranKewajibanRoutes'); 
-const PembelianAsetRoutes = require('./routes/pembelianAsetRoutes'); 
-const PengeluaranBebanRoutes = require('./routes/pengeluaranBebanRoutes');
-const PenghapusanPiutangRoutes = require('./routes/penghapusanPiutangRoutes');
-const SetoranBankRoutes = require('./routes/setoranBankRoutes'); 
-const PenarikanModalRoutes = require('./routes/penarikanModalRoutes');
-const TransferRekeningRoutes = require('./routes/transferRekeningRoutes');
-const BebanDibayarDimukaRoutes = require('./routes/bebanDibayarDimukaRoutes');
-const laporanRoute = require('./routes/laporan');
-
+const path = require('path');
 const sequelize = require('./config/db');
 require('dotenv').config();
 
-
 const app = express();
 
-const path = require('path');
+// Static file
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
+  origin: [
+    'http://localhost:5173',
+    'https://90ce-202-58-76-62.ngrok-free.app'//ngrok URL
+  ],
+  credentials: true,
 }));
 app.use(express.json());
 
-// Routes
-app.use('/api/saldo-awal', saldoAwalRoutes);
-app.use('/api/users', userRoutes);           
-app.use('/api/auth', authRoutes);
-app.use('/api/protected', protectedRoutes);
-app.use('/api/beranda', berandaRoutes);
-app.use('/api/akun', akunRoutes); 
-app.use('/api/penjualan', penjualanRoutes);
-app.use('/api/jasa', jasaRoutes);
-app.use('/api/kategori-jasa', kategoriJasaRoutes);
-app.use('/api/pelanggan', pelangganRoutes);
-app.use('/api/pemasok', pemasokRoutes);
-app.use('/api/bank', bankRoutes);
-app.use('/api/aset', asetRoutes);
-app.use('/api/aset-lain', asetLainRoutes);
-app.use('/api/pemberi-pinjaman', pemberiPinjamanRoutes);
-app.use('/api/bank-pemberi-pinjaman', bankPemberiPinjamanRoutes);
-app.use('/api/beban-lain', bebanLainRoutes);
-app.use('/api/utang', utangRoutes);
-app.use('/api/piutang', piutangRoutes);
-app.use('/api/penerimaan-modal', penerimaanModalRoutes);
-app.use('/api/penarikan-bank', penarikanBankRoutes);
-app.use('/api/pendapatan-dimuka', pendapatanDimukaRoutes);
-app.use('/api/penghasilan-lain', PenghasilanLainRoutes); 
-app.use('/api/pengeluaran-kewajiban', PengeluaranKewajibanRoutes); 
-app.use('/api/pembelian-aset', PembelianAsetRoutes);
-app.use('/api/pengeluaran-beban', PengeluaranBebanRoutes);
-app.use('/api/penghapusan-piutang', PenghapusanPiutangRoutes); 
-app.use('/api/setoran-bank', SetoranBankRoutes);
-app.use('/api/penarikan-modal', PenarikanModalRoutes);
-app.use('/api/transfer-rekening', TransferRekeningRoutes);
-app.use('/api/beban-dibayar-dimuka', BebanDibayarDimukaRoutes);
-app.use('/api/laporan', laporanRoute);
-// Sync database
+// Route API
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/protected', require('./routes/protectedRoutes'));
+app.use('/api/beranda', require('./routes/beranda'));
+app.use('/api/saldo-awal', require('./routes/saldoAwalRoutes'));
+app.use('/api/akun', require('./routes/akunRoutes'));
+app.use('/api/penjualan', require('./routes/penjualanRoutes'));
+app.use('/api/jasa', require('./routes/jasaRoutes'));
+app.use('/api/kategori-jasa', require('./routes/kategoriJasaRoutes'));
+app.use('/api/pelanggan', require('./routes/pelangganRoutes'));
+app.use('/api/pemasok', require('./routes/pemasokRoutes'));
+app.use('/api/bank', require('./routes/bankRoutes'));
+app.use('/api/aset', require('./routes/asetRoutes'));
+app.use('/api/aset-lain', require('./routes/asetLainRoutes'));
+app.use('/api/pemberi-pinjaman', require('./routes/pemberiPinjamanRoutes'));
+app.use('/api/bank-pemberi-pinjaman', require('./routes/bankPemberiPinjamanRoutes'));
+app.use('/api/beban-lain', require('./routes/bebanLainRoutes'));
+app.use('/api/utang', require('./routes/utangRoutes'));
+app.use('/api/piutang', require('./routes/piutang'));
+app.use('/api/penerimaan-modal', require('./routes/penerimaanModalRoutes'));
+app.use('/api/penarikan-bank', require('./routes/penarikanBankRoutes'));
+app.use('/api/pendapatan-dimuka', require('./routes/pendapatanDimukaRoutes'));
+app.use('/api/penghasilan-lain', require('./routes/penghasilanLainRoutes'));
+app.use('/api/pengeluaran-kewajiban', require('./routes/pengeluaranKewajibanRoutes'));
+app.use('/api/pembelian-aset', require('./routes/pembelianAsetRoutes'));
+app.use('/api/pengeluaran-beban', require('./routes/pengeluaranBebanRoutes'));
+app.use('/api/penghapusan-piutang', require('./routes/penghapusanPiutangRoutes'));
+app.use('/api/setoran-bank', require('./routes/setoranBankRoutes'));
+app.use('/api/penarikan-modal', require('./routes/penarikanModalRoutes'));
+app.use('/api/transfer-rekening', require('./routes/transferRekeningRoutes'));
+app.use('/api/beban-dibayar-dimuka', require('./routes/bebanDibayarDimukaRoutes'));
+app.use('/api/laporan', require('./routes/laporan'));
+
+// Sync DB
 sequelize.sync().then(() => console.log('Database synced'));
 
 module.exports = app;

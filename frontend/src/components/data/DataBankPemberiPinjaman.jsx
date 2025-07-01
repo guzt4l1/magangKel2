@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ArrowLeft, Pencil, Trash2, Plus } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const API = 'http://localhost:5000/api/bank-pemberi-pinjaman';
+const API = '/api/bank-pemberi-pinjaman';
 
 const DataBankPemberiPinjaman = ({ onBack }) => {
   const [data, setData] = useState([]);
@@ -18,8 +18,8 @@ const DataBankPemberiPinjaman = ({ onBack }) => {
     try {
       const [resData, resBank, resPemberi] = await Promise.all([
         axios.get(API),
-        axios.get('http://localhost:5000/api/bank'),
-        axios.get('http://localhost:5000/api/pemberi-pinjaman'),
+        axios.get('/api/bank'),
+        axios.get('/api/pemberi-pinjaman'),
       ]);
       setData(resData.data);
       setBanks(resBank.data);

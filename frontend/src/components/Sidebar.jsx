@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user')) || {};
 
   const handleLogout = () => {
@@ -28,6 +28,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     });
   };
 
+  const handleNavClick = () => {
+    if (window.innerWidth < 768) {
+      toggleSidebar(); // Tutup sidebar di mobile
+    }
+  };
+
   const linkClasses = ({ isActive }) =>
     `flex items-center gap-3 p-2 rounded transition-colors ${
       isActive ? 'bg-gray-700 text-white' : 'hover:text-gray-300'
@@ -36,15 +42,33 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <>
       {/* Header Mobile */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-gray-800 text-white fixed w-full z-50">
-        <div className="text-2xl font-bold">FinanceApp</div>
-        <button onClick={toggleSidebar} className="text-2xl">
-          <FaBars />
-        </button>
-      </div>
+{/* Header Mobile */}
+<div className="md:hidden flex items-center justify-between p-4 bg-gray-800 text-white fixed w-full z-50">
+  <div className="flex items-center gap-3 text-xl font-bold">
+    {user.foto ? (
+      <img
+        src={
+          user.foto.startsWith('/uploads')
+            ? `http://localhost:5000${user.foto}`
+            : `http://localhost:5000/uploads/${user.foto}`
+        }
+        alt="Profile"
+        className="w-8 h-8 rounded-full object-cover border border-white"
+      />
+    ) : (
+      <FaUserCircle className="text-2xl" />
+    )}
+    <span>FinanceApp</span>
+  </div>
+
+  <button onClick={toggleSidebar} className="text-2xl">
+    <FaBars />
+  </button>
+</div>
+
 
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white flex flex-col transform transition-transform duration-300 z-40
+      <div className={`fixed top-0 left-0 h-screen w-64 bg-gray-800 text-white flex flex-col transform transition-transform duration-300 shadow-lg z-40
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:relative md:flex pt-16 md:pt-0`}
       >
         {/* Sidebar Title Desktop */}
@@ -53,7 +77,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           {user.foto ? (
             <img
               src={
-                user.foto?.startsWith('/uploads')
+                user.foto.startsWith('/uploads')
                   ? `http://localhost:5000${user.foto}`
                   : `http://localhost:5000/uploads/${user.foto}`
               }
@@ -68,27 +92,27 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
             <li>
-              <NavLink to="/Dashboard" end className={linkClasses}>
+              <NavLink to="/Dashboard" end className={linkClasses} onClick={handleNavClick}>
                 <FaHome /> Beranda
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Data" className={linkClasses}>
+              <NavLink to="/Data" className={linkClasses} onClick={handleNavClick}>
                 <FaDatabase /> Data
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Transaksi" className={linkClasses}>
+              <NavLink to="/Transaksi" className={linkClasses} onClick={handleNavClick}>
                 <FaExchangeAlt /> Transaksi
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Laporan" className={linkClasses}>
+              <NavLink to="/Laporan" className={linkClasses} onClick={handleNavClick}>
                 <FaFileAlt /> Laporan
               </NavLink>
             </li>
             <li>
-              <NavLink to="/Pengaturan" className={linkClasses}>
+              <NavLink to="/Pengaturan" className={linkClasses} onClick={handleNavClick}>
                 <FaCog /> Pengaturan
               </NavLink>
             </li>

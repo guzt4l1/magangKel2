@@ -4,8 +4,8 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 
-const API_SALDO = 'http://localhost:5000/api/saldo-awal';
-const API_AKUN = 'http://localhost:5000/api/akun';
+const API_SALDO = '/api/saldo-awal';
+const API_AKUN = '/api/akun';
 
 const DataSaldoAwal = ({ onBack }) => {
   const [data, setData] = useState([]);

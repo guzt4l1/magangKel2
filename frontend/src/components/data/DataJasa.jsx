@@ -3,9 +3,9 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 
-const API_JASA = 'http://localhost:5000/api/jasa';
-const API_KATEGORI = 'http://localhost:5000/api/kategori-jasa';
-const API_AKUN = 'http://localhost:5000/api/akun';
+const API_JASA = '/api/jasa';
+const API_KATEGORI = '/api/kategori-jasa';
+const API_AKUN = '/api/akun';
 
 const DataJasa = ({ onBack }) => {
   const [data, setData] = useState([]);

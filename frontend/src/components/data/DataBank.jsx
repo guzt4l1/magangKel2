@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const API = 'http://localhost:5000/api/bank';
+const API = '/api/bank';
 
 const DataBank = ({ onBack }) => {
   const [data, setData] = useState([]);

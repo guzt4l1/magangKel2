@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const API = 'http://localhost:5000/api/pelanggan';
+const API = '/api/pelanggan';
 
 const DataPelanggan = ({ onBack }) => {
   const [data, setData] = useState([]);

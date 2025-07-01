@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Sidebar from '../Sidebar';
 import { Outlet, useNavigate } from 'react-router-dom';
 import useIdleTimer from '../../hooks/useIdleTimer';
@@ -5,6 +6,11 @@ import Swal from 'sweetalert2';
 
 export default function MainLayout() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(prev => !prev);
+  };
 
   useIdleTimer(15 * 60 * 1000, () => {
     Swal.fire({
@@ -22,7 +28,7 @@ export default function MainLayout() {
 
   return (
     <div className="flex h-screen bg-gray-900">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <div className="flex-1 h-full overflow-y-auto p-6 bg-gray-800 text-white">
         <Outlet />
       </div>

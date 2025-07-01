@@ -39,7 +39,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/beranda?tahun=${tahun}`);
+        const res = await axios.get(`/api/beranda?tahun=${tahun}`);
         console.log("DATA DITERIMA:", res.data); 
         const { penjualan, jasa, utang, piutang, beban_usaha } = res.data;
         setPenjualanData(penjualan || []);

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 import Swal from 'sweetalert2';
 
-const API = 'http://localhost:5000/api/pemberi-pinjaman';
+const API = '/api/pemberi-pinjaman';
 
 const DataPemberiPinjaman = ({ onBack }) => {
   const [data, setData] = useState([]);

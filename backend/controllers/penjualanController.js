@@ -6,29 +6,85 @@ const Akun = require('../models/akun');
 const Pelanggan = require('../models/pelanggan');
 const Piutang = require('../models/piutang');
 
-// Relasi
-Penjualan.belongsTo(Pelanggan, { foreignKey: 'pelanggan_id' });
-Penjualan.belongsTo(Akun, { as: 'piutang', foreignKey: 'akun_piutang_id' });
-Penjualan.belongsTo(Akun, { as: 'penjualan', foreignKey: 'akun_penjualan_id' });
+// Relasi hanya di-declare sekali per model
+function setupAssociations() {
+  // Untuk Penjualan Jasa dan Aset
+  if (!Penjualan.associations.pelanggan) {
+    Penjualan.belongsTo(Pelanggan, { foreignKey: 'pelanggan_id' });
+  }
+  if (!Penjualan.associations.piutang) {
+    Penjualan.belongsTo(Akun, { as: 'piutang', foreignKey: 'akun_piutang_id' });
+  }
+  if (!Penjualan.associations.penjualan) {
+    Penjualan.belongsTo(Akun, { as: 'penjualan', foreignKey: 'akun_penjualan_id' });
+  }
+  if (!Penjualan.associations.jasa) {
+    const Jasa = require('../models/jasa');
+    Penjualan.belongsTo(Jasa, { foreignKey: 'jasa_id' });
+  }
+  if (!Penjualan.associations.aset) {
+    Penjualan.belongsTo(Akun, { as: 'aset', foreignKey: 'akun_aset_id' });
+  }
+
+  // Untuk Pembayaran Piutang
+  if (!Piutang.associations.pelanggan) {
+    Piutang.belongsTo(Pelanggan, { foreignKey: 'pelanggan_id' });
+  }
+  if (!Piutang.associations.piutang) {
+    Piutang.belongsTo(Akun, { as: 'piutang', foreignKey: 'akun_piutang_id' });
+  }
+  if (!Piutang.associations.penjualan) {
+    Piutang.belongsTo(Akun, { as: 'penjualan', foreignKey: 'akun_penjualan_id' });
+  }
+}
 
 exports.getAllPenjualan = async (req, res) => {
   try {
-    const data = await Penjualan.findAll({
-      include: [
-        { model: Pelanggan, attributes: ['id', 'nama'] },
-        { model: Akun, as: 'piutang', attributes: ['id', 'kode', 'nama'] },
-        { model: Akun, as: 'penjualan', attributes: ['id', 'kode', 'nama'] }
-      ],
-      order: [['tanggal', 'DESC']]
+    setupAssociations();
+    const { jenis_transaksi } = req.query;
+
+    if (jenis_transaksi === 'pembayaran_piutang') {
+      const dataPiutang = await Piutang.findAll({
+        include: [
+          { model: Pelanggan, attributes: ['id', 'nama'] },
+          { model: Akun, as: 'piutang', attributes: ['id', 'kode', 'nama'] },
+          { model: Akun, as: 'penjualan', attributes: ['id', 'kode', 'nama'] }
+        ],
+        order: [['tanggal_transaksi', 'DESC'], ['id', 'DESC']]
+      });
+      return res.json(dataPiutang);
+    }
+
+    const includeBase = [
+      { model: Pelanggan, attributes: ['id', 'nama'] },
+      { model: Akun, as: 'piutang', attributes: ['id', 'kode', 'nama'] },
+      { model: Akun, as: 'penjualan', attributes: ['id', 'kode', 'nama'] },
+    ];
+
+    if (jenis_transaksi === 'penjualan_jasa') {
+      const Jasa = require('../models/jasa');
+      includeBase.push({ model: Jasa, attributes: ['id', 'nama', 'harga'] });
+    }
+
+    if (jenis_transaksi === 'penjualan_aset') {
+      includeBase.push({ model: Akun, as: 'aset', attributes: ['id', 'kode', 'nama'] });
+    }
+
+    const dataPenjualan = await Penjualan.findAll({
+      include: includeBase,
+      order: [['tanggal', 'DESC'], ['id', 'DESC']]
     });
-    res.json(data);
+
+    return res.json(dataPenjualan);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
 exports.getPenjualanById = async (req, res) => {
   try {
+    setupAssociations();
     const data = await Penjualan.findByPk(req.params.id, {
       include: [
         { model: Pelanggan, attributes: ['id', 'nama'] },
@@ -128,7 +184,6 @@ exports.updatePenjualan = async (req, res) => {
 
     await data.update(updatedData, { transaction: t });
 
-    // Update piutang jika metode_pembayaran = kredit
     if (updatedData.metode_pembayaran === 'kredit') {
       const sisa_tagihan = parseFloat(updatedData.total) - parseFloat(updatedData.uang_muka || 0);
       await Piutang.upsert({
@@ -166,7 +221,7 @@ exports.deletePenjualan = async (req, res) => {
       if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
     }
 
-    await Piutang.destroy({ where: { no_invoice: `INV-${id}` } }); // Hapus piutang terkait jika ada
+    await Piutang.destroy({ where: { no_invoice: `INV-${id}` } });
     await data.destroy();
     res.json({ message: 'Berhasil dihapus' });
   } catch (error) {

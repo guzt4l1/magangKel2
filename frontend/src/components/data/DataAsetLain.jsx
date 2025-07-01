@@ -3,7 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { Pencil, Trash2, Plus, ArrowLeft } from 'lucide-react';
 
-const API = 'http://localhost:5000/api/aset-lain';
+const API = '/api/aset-lain';
 
 const DataAsetLain = ({ onBack }) => {
   const [data, setData] = useState([]);
